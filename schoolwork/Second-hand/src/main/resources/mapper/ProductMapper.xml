@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.secondhand.mapper.ProductMapper">
+
+    <!-- 按条件分页搜索商品（名称、分类、价格区间、排序）只展示在售且有余量的商品 -->
+    <select id="selectByCondition" resultType="com.secondhand.entity.Product">
+        SELECT * FROM product
+        <where>
+            status = 1 AND remaining > 0
+            <if test="name != null and name != ''">
+                AND name LIKE CONCAT('%', #{name}, '%')
+            </if>
+            <if test="categoryId != null">
+                AND category_id = #{categoryId}
+            </if>
+            <if test="minPrice != null and minPrice != ''">
+                AND price &gt;= #{minPrice}
+            </if>
+            <if test="maxPrice != null and maxPrice != ''">
+                AND price &lt;= #{maxPrice}
+            </if>
+        </where>
+        <choose>
+            <when test="sortBy == 'price_asc'">ORDER BY price ASC</when>
+            <when test="sortBy == 'price_desc'">ORDER BY price DESC</when>
+            <when test="sortBy == 'time_asc'">ORDER BY create_time ASC</when>
+            <otherwise>ORDER BY create_time DESC</otherwise>
+        </choose>
+        <if test="size != null and size > 0">
+            LIMIT #{size} OFFSET #{offset}
+        </if>
+    </select>
+
+    <!-- 按条件统计总数（只统计在售且有余量的商品） -->
+    <select id="countByCondition" resultType="long">
+        SELECT COUNT(*) FROM product
+        <where>
+            status = 1 AND remaining > 0
+            <if test="name != null and name != ''">
+                AND name LIKE CONCAT('%', #{name}, '%')
+            </if>
+            <if test="categoryId != null">
+                AND category_id = #{categoryId}
+            </if>
+            <if test="minPrice != null and minPrice != ''">
+                AND price &gt;= #{minPrice}
+            </if>
+            <if test="maxPrice != null and maxPrice != ''">
+                AND price &lt;= #{maxPrice}
+            </if>
+        </where>
+    </select>
+
+    <!-- 查询用户发布的商品（分页） -->
+    <select id="selectByUserId" resultType="com.secondhand.entity.Product">
+        SELECT * FROM product
+        <where>
+            user_id = #{userId}
+            <if test="status != null">
+                AND status = #{status}
+            </if>
+        </where>
+        ORDER BY create_time DESC
+        <if test="size != null and size > 0">
+            LIMIT #{size} OFFSET #{offset}
+        </if>
+    </select>
+
+    <!-- 统计用户发布的商品数量 -->
+    <select id="countByUserId" resultType="long">
+        SELECT COUNT(*) FROM product
+        <where>
+            user_id = #{userId}
+            <if test="status != null">
+                AND status = #{status}
+            </if>
+        </where>
+    </select>
+
+</mapper>

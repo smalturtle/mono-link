@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>闲小铺 - 二手商品交易平台</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- 顶部导航栏 -->
+    <header class="header" id="header">
+        <div class="container header-inner">
+            <a href="#" class="logo" data-nav="home">
+                <svg class="logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+                    <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
+                    <line x1="12" y1="22.08" x2="12" y2="12"/>
+                </svg>
+                闲小铺
+            </a>
+            <div class="search-bar" id="searchBar">
+                <input type="text" id="searchInput" placeholder="搜索商品..." />
+                <button id="searchBtn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                    </svg>
+                </button>
+            </div>
+            <button class="hamburger-btn" id="hamburgerBtn" aria-label="菜单">
+                <span></span><span></span><span></span>
+            </button>
+            <nav class="nav-links" id="navLinks">
+                <a href="#" data-nav="home" class="nav-item active">首页</a>
+                <a href="#" data-nav="cart" class="nav-item" id="cartNav">
+                    购物车<span class="badge" id="cartBadge" style="display:none">0</span>
+                </a>
+                <a href="#" data-nav="orders" class="nav-item" id="ordersNav">我的订单</a>
+                <a href="#" data-nav="sellerOrders" class="nav-item" id="sellerOrdersNav">卖家订单</a>
+                <span class="nav-divider"></span>
+                <span id="authArea">
+                    <a href="#" id="loginBtn" class="nav-item">登录</a>
+                    <a href="#" id="registerBtn" class="btn btn-primary btn-sm">注册</a>
+                </span>
+                <span id="userArea" style="display:none">
+                    <a href="#" data-nav="publish" class="nav-item" id="publishNav">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="icon-sm">
+                            <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+                        </svg>
+                        我要卖
+                    </a>
+                    <span class="user-dropdown">
+                        <a href="#" class="nav-item" id="userNameDisplay">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="icon-sm">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                                <circle cx="12" cy="7" r="4"/>
+                            </svg>
+                            <span id="displayName"></span>
+                        </a>
+                        <div class="dropdown-menu">
+                            <a href="#" data-nav="profile" id="profileLink">个人中心</a>
+                            <a href="#" data-nav="favorites" id="favoritesLink">我的收藏</a>
+                            <a href="#" data-nav="myProducts" id="myProductsLink">我的发布</a>
+                            <a href="#" data-nav="admin" id="adminLink" style="display:none">管理后台</a>
+                            <a href="#" id="logoutLink">退出登录</a>
+                        </div>
+                    </span>
+                </span>
+            </nav>
+        </div>
+    </header>
+
+    <!-- 主内容区 -->
+    <main class="main" id="mainContent">
+        <!-- 动态渲染 -->
+    </main>
+
+    <!-- 登录模态框 -->
+    <div class="modal-overlay" id="loginModal">
+        <div class="modal">
+            <button class="modal-close" data-modal="loginModal">&times;</button>
+            <h2 class="modal-title">登录</h2>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label>用户名</label>
+                    <input type="text" name="username" placeholder="请输入用户名" required />
+                </div>
+                <div class="form-group">
+                    <label>密码</label>
+                    <input type="password" name="password" placeholder="请输入密码" required />
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">登 录</button>
+            </form>
+            <p class="modal-footer-text">还没有账号？<a href="#" id="switchToRegister">立即注册</a></p>
+        </div>
+    </div>
+
+    <!-- 注册模态框 -->
+    <div class="modal-overlay" id="registerModal">
+        <div class="modal">
+            <button class="modal-close" data-modal="registerModal">&times;</button>
+            <h2 class="modal-title">注册</h2>
+            <form id="registerForm">
+                <div class="form-group">
+                    <label>用户名</label>
+                    <input type="text" name="username" placeholder="请输入用户名" required />
+                </div>
+                <div class="form-group">
+                    <label>密码</label>
+                    <input type="password" name="password" placeholder="请输入密码（至少6位）" required minlength="6" />
+                </div>
+                <div class="form-group">
+                    <label>手机号</label>
+                    <input type="text" name="phone" placeholder="请输入手机号（选填）" />
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">注 册</button>
+            </form>
+            <p class="modal-footer-text">已有账号？<a href="#" id="switchToLogin">立即登录</a></p>
+        </div>
+    </div>
+
+    <!-- 发布商品模态框 -->
+    <div class="modal-overlay" id="publishModal">
+        <div class="modal" style="max-width:560px">
+            <button class="modal-close" data-modal="publishModal">&times;</button>
+            <h2 class="modal-title" id="publishModalTitle">发布商品</h2>
+            <form id="publishForm">
+                <div class="form-group">
+                    <label>商品名称</label>
+                    <input type="text" name="name" placeholder="请输入商品名称" required />
+                </div>
+                <div class="form-group">
+                    <label>商品描述</label>
+                    <textarea name="description" placeholder="请描述商品详情（选填）" rows="3"></textarea>
+                </div>
+                <div class="form-inline">
+                    <div class="form-group">
+                        <label>价格 (¥)</label>
+                        <input type="number" name="price" step="0.01" min="0" placeholder="0.00" required />
+                    </div>
+                    <div class="form-group">
+                        <label>成色</label>
+                        <select name="condition">
+                            <option value="几乎全新">几乎全新</option>
+                            <option value="全新">全新</option>
+                            <option value="轻微使用痕迹">轻微使用痕迹</option>
+                            <option value="明显使用痕迹">明显使用痕迹</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>商品图片（支持多张）</label>
+                    <div class="multi-image-area" id="publishImageArea">
+                        <div class="image-preview-list" id="publishImagePreview"></div>
+                        <div class="image-add-btn" id="publishImageAddBtn">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+                            </svg>
+                            <span>添加图片</span>
+                        </div>
+                    </div>
+                    <input type="file" id="publishImageInput" accept="image/*" multiple style="display:none" />
+                    <span class="upload-hint" id="publishUploadHint">最多9张，提交时自动上传</span>
+                </div>
+                <div class="form-group">
+                    <label>商品分类</label>
+                    <div class="cascade-select" id="cascadeCategoryPublish">
+                        <select class="cascade-level" id="cascadePublishLevel1">
+                            <option value="">请选择分类</option>
+                        </select>
+                        <input type="hidden" name="categoryId" id="publishCategoryId" value="" />
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block" id="publishSubmitBtn">发布商品</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast 提示 -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script src="js/api.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>闲小铺 - 设计预览 V2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+    --color-primary: #E07A5F;
+    --color-primary-light: #F2A68A;
+    --color-primary-dark: #C96A4F;
+    --color-primary-bg: rgba(224,122,95,.08);
+    --color-accent: #81B29A;
+    --color-accent-light: #A8D5BA;
+    --color-dark: #3D405B;
+    --color-mid: #5C5F7A;
+    --color-muted: #A3A5BA;
+    --color-cream: #F4F1DE;
+    --color-cream-2: #FDF8F0;
+    --color-white: #FFFCF7;
+    --color-card: #FFFFFF;
+    --color-danger: #E07A5F;
+    --color-success: #81B29A;
+    --color-warning: #F2CC8F;
+    --radius: 16px;
+    --radius-sm: 10px;
+    --radius-xs: 8px;
+    --shadow-sm: 0 2px 8px rgba(61,64,91,.06);
+    --shadow: 0 4px 16px rgba(61,64,91,.08);
+    --shadow-md: 0 8px 32px rgba(61,64,91,.1);
+    --shadow-lg: 0 16px 48px rgba(61,64,91,.12);
+    --shadow-xl: 0 24px 64px rgba(61,64,91,.16);
+    --transition: 0.3s cubic-bezier(.4,0,.2,1);
+}
+
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+    font-family: 'Inter', 'Noto Sans SC', -apple-system, sans-serif;
+    background: var(--color-cream-2);
+    color: var(--color-dark);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+}
+a{color:inherit;text-decoration:none}
+
+/* ── Typography ── */
+h2{font-size:22px;font-weight:700;letter-spacing:-.3px}
+.section-header{
+    display:flex;align-items:center;justify-content:space-between;
+    margin-bottom:24px;
+}
+.section-header p{color:var(--color-muted);font-size:14px}
+.greeting{font-size:14px;color:var(--color-muted);font-weight:500;margin-bottom:4px}
+.greeting span{color:var(--color-primary);font-weight:700}
+
+/* ── Header (Glass Capsule) ── */
+.header{
+    position:sticky;top:16px;z-index:100;
+    max-width:1100px;margin:0 auto;padding:0 20px;
+}
+.header-inner{
+    display:flex;align-items:center;gap:20px;
+    height:56px;padding:0 8px 0 20px;
+    background: rgba(255,255,255,.75);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border-radius: 50px;
+    border:1px solid rgba(224,122,95,.12);
+    box-shadow: var(--shadow);
+}
+.logo{
+    display:flex;align-items:center;gap:8px;
+    font-size:20px;font-weight:800;
+    color: var(--color-primary);
+    letter-spacing:-.5px;
+    flex-shrink:0;
+}
+.logo svg{width:26px;height:26px}
+
+.search-capsule{
+    flex:1;max-width:420px;
+    display:flex;align-items:center;
+    background: rgba(224,122,95,.06);
+    border-radius:50px;padding:0 16px;
+    height:38px;transition:var(--transition);
+    border:2px solid transparent;
+}
+.search-capsule:focus-within{
+    background:#fff;
+    border-color:var(--color-primary-light);
+    box-shadow:0 0 0 5px rgba(224,122,95,.08);
+}
+.search-capsule input{
+    flex:1;border:none;outline:none;background:transparent;
+    font-size:14px;color:var(--color-dark);
+}
+.search-capsule input::placeholder{color:var(--color-muted)}
+.search-capsule svg{width:16px;height:16px;color:var(--color-muted);flex-shrink:0}
+
+.nav-capsule{
+    display:flex;align-items:center;gap:4px;
+    background:rgba(61,64,91,.04);
+    border-radius:50px;padding:3px;
+}
+.nav-capsule a{
+    padding:7px 16px;border-radius:50px;
+    font-size:13px;font-weight:600;
+    color:var(--color-muted);
+    transition:var(--transition);
+}
+.nav-capsule a:hover{color:var(--color-dark)}
+.nav-capsule a.active{
+    background:#fff;
+    color:var(--color-primary);
+    box-shadow:0 2px 8px rgba(224,122,95,.15);
+}
+
+/* ── Main ── */
+.main{max-width:1100px;margin:0 auto;padding:32px 20px 80px}
+
+/* ── Hero Section ── */
+.hero{
+    display:flex;align-items:center;justify-content:space-between;
+    margin-bottom:36px;
+}
+.hero-left h1{font-size:32px;font-weight:900;letter-spacing:-1px}
+.hero-left h1 .dot{color:var(--color-primary)}
+.hero-tags{display:flex;gap:8px;margin-top:12px}
+.hero-tag{
+    padding:6px 14px;border-radius:50px;
+    font-size:13px;font-weight:600;
+    background:var(--color-primary-bg);
+    color:var(--color-primary);
+}
+
+/* ── Category Pills ── */
+.cat-pills{display:flex;gap:8px;margin-bottom:32px;flex-wrap:wrap}
+.cat-pill{
+    padding:8px 20px;border-radius:50px;
+    font-size:13px;font-weight:600;
+    background:#fff;color:var(--color-mid);
+    border:1.5px solid transparent;
+    cursor:pointer;transition:var(--transition);
+    box-shadow:var(--shadow-sm);
+}
+.cat-pill:hover{border-color:var(--color-primary-light);color:var(--color-primary)}
+.cat-pill.active{
+    background:var(--color-primary);
+    color:#fff;border-color:var(--color-primary);
+    box-shadow:0 4px 16px rgba(224,122,95,.3);
+}
+
+/* ── Product Grid (Masonry-style) ── */
+.product-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
+    gap:20px;
+}
+.product-card{
+    background:var(--color-card);
+    border-radius:var(--radius);
+    overflow:hidden;
+    box-shadow:var(--shadow-sm);
+    transition:var(--transition);
+    cursor:pointer;
+    border:1px solid transparent;
+}
+.product-card:hover{
+    transform:translateY(-6px);
+    box-shadow:var(--shadow-lg);
+    border-color:rgba(224,122,95,.15);
+}
+.card-img-wrap{
+    position:relative;overflow:hidden;
+    aspect-ratio:4/3;background:linear-gradient(135deg,#E07A5F15,#81B29A15);
+    display:flex;align-items:center;justify-content:center;
+}
+.card-img-wrap .placeholder-img{
+    font-size:56px;opacity:.5;transition:var(--transition);
+}
+.product-card:hover .placeholder-img{transform:scale(1.08);opacity:.7}
+.card-img-overlay{
+    position:absolute;bottom:0;left:0;right:0;
+    height:60px;
+    background:linear-gradient(transparent,rgba(0,0,0,.4));
+    opacity:0;transition:var(--transition);
+    display:flex;align-items:flex-end;padding:10px 14px;gap:8px;
+}
+.product-card:hover .card-img-overlay{opacity:1}
+.card-img-overlay button{
+    padding:5px 12px;border-radius:50px;
+    font-size:12px;font-weight:600;border:none;color:#fff;
+    background:rgba(255,255,255,.25);
+    backdrop-filter:blur(8px);
+    cursor:pointer;transition:var(--transition);
+}
+.card-img-overlay button:hover{background:var(--color-primary)}
+
+.sold-out-badge{
+    position:absolute;top:12px;right:12px;
+    padding:4px 10px;border-radius:50px;
+    font-size:11px;font-weight:700;
+    background:rgba(0,0,0,.6);color:#fff;
+    backdrop-filter:blur(8px);
+}
+
+.card-body{padding:16px}
+.card-top-row{display:flex;align-items:center;gap:6px;margin-bottom:6px}
+.card-condition-tag{
+    padding:2px 8px;border-radius:4px;
+    font-size:11px;font-weight:600;
+    background:var(--color-primary-bg);
+    color:var(--color-primary);
+}
+.card-name{font-size:15px;font-weight:700;margin-bottom:4px;line-height:1.3}
+.card-price{
+    font-size:20px;font-weight:800;color:var(--color-primary);
+    margin-bottom:10px;
+}
+.card-price .unit{font-size:13px;font-weight:600}
+
+/* Progress bar */
+.card-stock-bar{
+    height:6px;background:rgba(61,64,91,.06);
+    border-radius:50px;margin-bottom:8px;overflow:hidden;
+}
+.card-stock-fill{
+    height:100%;border-radius:50px;
+    background:linear-gradient(90deg,var(--color-primary-light),var(--color-primary));
+    transition:width .6s ease;
+}
+.card-stock-info{
+    display:flex;justify-content:space-between;
+    font-size:12px;color:var(--color-muted);
+    margin-bottom:8px;
+}
+
+.card-footer-row{
+    display:flex;align-items:center;justify-content:space-between;
+    padding-top:8px;border-top:1px solid rgba(61,64,91,.06);
+}
+.card-stats{display:flex;align-items:center;gap:12px;font-size:12px;color:var(--color-muted)}
+.card-stats span{display:flex;align-items:center;gap:3px}
+.card-stats svg{width:13px;height:13px}
+
+/* ── Tabs ── */
+.tabs{
+    display:flex;gap:4px;
+    background:rgba(61,64,91,.04);
+    border-radius:50px;padding:3px;width:fit-content;
+    margin-bottom:24px;
+}
+.tab{
+    padding:8px 20px;border-radius:50px;
+    font-size:13px;font-weight:600;border:none;
+    background:transparent;color:var(--color-muted);
+    cursor:pointer;transition:var(--transition);
+    position:relative;
+}
+.tab.active{
+    background:#fff;color:var(--color-primary);
+    box-shadow:0 2px 8px rgba(224,122,95,.12);
+}
+.tab .badge{
+    display:inline-flex;align-items:center;justify-content:center;
+    min-width:20px;height:20px;padding:0 6px;
+    margin-left:6px;border-radius:50px;
+    font-size:11px;font-weight:700;
+    background:var(--color-muted);color:#fff;
+}
+.tab.active .badge{background:var(--color-primary)}
+
+/* ── Side Drawer ── */
+.drawer-overlay{
+    position:fixed;top:0;left:0;right:0;bottom:0;z-index:200;
+    background:rgba(0,0,0,0);
+    pointer-events:none;transition:var(--transition);
+}
+.drawer-overlay.open{
+    background:rgba(0,0,0,.4);
+    pointer-events:auto;
+}
+.drawer{
+    position:fixed;top:0;right:0;bottom:0;z-index:201;
+    width:420px;max-width:100vw;
+    background:var(--color-card);
+    box-shadow:var(--shadow-xl);
+    transform:translateX(100%);
+    transition:transform .35s cubic-bezier(.4,0,.2,1);
+    overflow-y:auto;
+}
+.drawer-overlay.open .drawer{transform:translateX(0)}
+
+.drawer-close{
+    position:absolute;top:16px;left:16px;
+    width:36px;height:36px;border-radius:50%;
+    border:none;background:rgba(0,0,0,.06);
+    font-size:18px;color:var(--color-mid);
+    cursor:pointer;display:flex;align-items:center;justify-content:center;
+    z-index:10;transition:var(--transition);
+}
+.drawer-close:hover{background:rgba(0,0,0,.12)}
+.drawer-img{
+    width:100%;aspect-ratio:4/3;
+    background:linear-gradient(135deg,#E07A5F20,#81B29A20);
+    display:flex;align-items:center;justify-content:center;
+    font-size:80px;opacity:.5;
+}
+.drawer-body{padding:24px}
+.drawer-body h3{font-size:22px;font-weight:800;margin-bottom:4px}
+.drawer-price{font-size:28px;font-weight:800;color:var(--color-primary);margin-bottom:16px}
+.drawer-price .unit{font-size:16px}
+.drawer-meta{
+    display:flex;gap:16px;
+    font-size:13px;color:var(--color-muted);margin-bottom:20px;
+}
+.drawer-stock-bar{
+    height:8px;border-radius:50px;overflow:hidden;
+    background:rgba(61,64,91,.06);margin-bottom:10px;
+}
+.drawer-stock-fill{
+    height:100%;border-radius:50px;
+    background:linear-gradient(90deg,var(--color-primary-light),var(--color-primary));
+}
+.drawer-stock-text{
+    font-size:13px;color:var(--color-muted);margin-bottom:20px;
+}
+.drawer-desc{
+    font-size:14px;color:var(--color-mid);line-height:1.7;
+    margin-bottom:24px;
+}
+.btn-drawer-cta{
+    width:100%;padding:14px;border:none;border-radius:50px;
+    font-size:16px;font-weight:700;color:#fff;
+    background:var(--color-primary);
+    cursor:pointer;transition:var(--transition);
+}
+.btn-drawer-cta:hover{
+    background:var(--color-primary-dark);
+    box-shadow:0 8px 24px rgba(224,122,95,.35);
+}
+
+/* ── Dashboard ── */
+.stats-grid{
+    display:grid;grid-template-columns:repeat(4,1fr);gap:16px;
+    margin-bottom:28px;
+}
+.stat-card{
+    background:#fff;border-radius:var(--radius);
+    padding:20px 24px;box-shadow:var(--shadow-sm);
+    transition:var(--transition);
+}
+.stat-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-md)}
+.stat-card .stat-label{font-size:13px;color:var(--color-muted);font-weight:600;margin-bottom:6px}
+.stat-card .stat-value{font-size:28px;font-weight:800;letter-spacing:-1px}
+.stat-card.accent .stat-value{color:var(--color-primary)}
+.stat-card.success .stat-value{color:var(--color-accent)}
+
+/* ── Skeleton ── */
+.skeleton{
+    background:linear-gradient(90deg,#eee 25%,#f5f5f5 50%,#eee 75%);
+    background-size:200% 100%;
+    animation:shimmer 1.5s ease-in-out infinite;
+    border-radius:var(--radius-sm);
+}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+.skeleton-card{height:280px}
+.skeleton-line{height:14px;width:100%;margin-bottom:8px}
+.skeleton-line.short{width:60%}
+
+/* ── Footer ── */
+.preview-footer{
+    text-align:center;padding:24px;
+    color:var(--color-muted);font-size:13px;
+    border-top:1px solid rgba(61,64,91,.06);
+}
+
+/* ── Responsive ── */
+@media(max-width:768px){
+    .hero-left h1{font-size:22px}
+    .stats-grid{grid-template-columns:repeat(2,1fr)}
+    .product-grid{grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px}
+    .drawer{width:100vw}
+}
+</style>
+</head>
+<body>
+
+<!-- Header: Glass Capsule -->
+<header class="header">
+    <div class="header-inner">
+        <div class="logo">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+                <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
+                <line x1="12" y1="22.08" x2="12" y2="12"/>
+            </svg>
+            闲小铺
+        </div>
+        <div class="search-capsule">
+            <input type="text" placeholder="搜索好东西..." />
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            </svg>
+        </div>
+        <div class="nav-capsule">
+            <a href="#" class="active">首页</a>
+            <a href="#">购物车</a>
+            <a href="#">我的</a>
+        </div>
+    </div>
+</header>
+
+<main class="main">
+
+<!-- Hero -->
+<div class="hero">
+    <div class="hero-left">
+        <div class="greeting">下午好，<span>小明</span></div>
+        <h1>发现<span class="dot">·</span>好物</h1>
+        <div class="hero-tags">
+            <span class="hero-tag">今日推荐</span>
+            <span class="hero-tag">限时捡漏</span>
+        </div>
+    </div>
+</div>
+
+<!-- Category Pills -->
+<div class="cat-pills">
+    <span class="cat-pill active">全部</span>
+    <span class="cat-pill">电子产品</span>
+    <span class="cat-pill">手机</span>
+    <span class="cat-pill">电脑</span>
+    <span class="cat-pill">图书教材</span>
+    <span class="cat-pill">生活用品</span>
+    <span class="cat-pill">服饰</span>
+</div>
+
+<!-- Section: 首页商品 -->
+<div class="section-header">
+    <h2>全部商品</h2>
+    <p>共 12 件在售</p>
+</div>
+<div class="product-grid" id="productGrid"></div>
+
+<br><br>
+
+<!-- Section: 我的发布 Tabs -->
+<div class="section-header"><h2>我的发布</h2></div>
+<div class="tabs">
+    <button class="tab active" onclick="switchTab(this)">在售<span class="badge">3</span></button>
+    <button class="tab" onclick="switchTab(this)">已售罄<span class="badge" style="background:#E07A5F">1</span></button>
+    <button class="tab" onclick="switchTab(this)">已下架<span class="badge">2</span></button>
+</div>
+<div class="product-grid" id="myProductsGrid"></div>
+
+<br><br>
+
+<!-- Section: Admin Dashboard -->
+<div class="section-header"><h2>管理后台概览</h2></div>
+<div class="stats-grid">
+    <div class="stat-card accent">
+        <div class="stat-label">总商品</div>
+        <div class="stat-value">12</div>
+    </div>
+    <div class="stat-card success">
+        <div class="stat-label">总订单</div>
+        <div class="stat-value">45</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-label">总用户</div>
+        <div class="stat-value">18</div>
+    </div>
+    <div class="stat-card accent">
+        <div class="stat-label">今日收入</div>
+        <div class="stat-value">&yen;2,380</div>
+    </div>
+</div>
+
+<!-- Section: Skeleton Loading -->
+<div class="section-header"><h2>骨架屏加载态</h2></div>
+<div class="product-grid">
+    <div class="skeleton skeleton-card"></div>
+    <div class="skeleton skeleton-card"></div>
+    <div class="skeleton skeleton-card"></div>
+    <div class="skeleton skeleton-card"></div>
+</div>
+
+</main>
+
+<div class="preview-footer">闲小铺 V2 设计预览 — 仅供演示，非实际页面</div>
+
+<!-- Drawer Overlay -->
+<div class="drawer-overlay" id="drawerOverlay">
+    <div class="drawer">
+        <button class="drawer-close" onclick="closeDrawer()">←</button>
+        <div class="drawer-img">📱</div>
+        <div class="drawer-body">
+            <h3 id="drawerName">iPhone 17 Pro Max</h3>
+            <div class="drawer-price"><span class="unit">&yen;</span>9,999</div>
+            <div class="drawer-meta">
+                <span>❤ 222 人喜欢</span>
+                <span>全新</span>
+                <span>分类：手机</span>
+            </div>
+            <div class="drawer-stock-bar">
+                <div class="drawer-stock-fill" id="drawerStockFill" style="width:80%"></div>
+            </div>
+            <div class="drawer-stock-text">库存 8 / 10 · 已售 2</div>
+            <div class="drawer-desc">这是商品的详细描述区域。2025年新款，国行全网通版本。几乎全新，无磕碰划痕，配件齐全。</div>
+            <button class="btn-drawer-cta">加入购物车</button>
+        </div>
+    </div>
+</div>
+
+<script>
+// Product data
+const products = [
+    { name:'iPhone 17 Pro Max', price:9999, remaining:8, quantity:10, sold:2, condition:'全新', views:222, category:'手机', soldOut:false },
+    { name:'MacBook Pro M4', price:12999, remaining:3, quantity:5, sold:2, condition:'轻微使用痕迹', views:156, category:'电脑', soldOut:false },
+    { name:'沙发（米灰色）', price:88, remaining:1, quantity:2, sold:1, condition:'全新', views:18, category:'家具', soldOut:false },
+    { name:'短袖T恤', price:111, remaining:6, quantity:10, sold:4, condition:'几乎全新', views:34, category:'服饰', soldOut:false },
+    { name:'数据结构教材', price:25, remaining:0, quantity:5, sold:5, condition:'轻微使用痕迹', views:89, category:'教材', soldOut:true },
+    { name:'鸡哥笔记本', price:2333, remaining:2, quantity:2, sold:0, condition:'轻微使用痕迹', views:1, category:'电脑', soldOut:false },
+    { name:'蓝牙耳机', price:199, remaining:7, quantity:10, sold:3, condition:'几乎全新', views:45, category:'电子产品', soldOut:false },
+    { name:'课外读物套装', price:58, remaining:4, quantity:4, sold:0, condition:'全新', views:23, category:'课外书', soldOut:false },
+];
+
+const myProducts = [
+    { name:'iPhone 17 Pro Max', price:9999, stock:8, sold:2, soldOut:false, down:false },
+    { name:'MacBook Pro M4', price:12999, stock:3, sold:2, soldOut:false, down:false },
+    { name:'短袖T恤', price:111, stock:6, sold:4, soldOut:false, down:false },
+    { name:'活着-余华', price:5, stock:0, sold:9, soldOut:true, down:false },
+    { name:'旧教材', price:10, stock:5, sold:0, soldOut:false, down:true },
+    { name:'闲置耳机', price:50, stock:3, sold:0, soldOut:false, down:true },
+];
+
+const condEmoji = { '全新':'🆕', '几乎全新':'✨', '轻微使用痕迹':'🔹', '明显使用痕迹':'🔸' };
+
+function renderProductCard(p) {
+    const soldPct = p.quantity > 0 ? Math.round((p.sold / p.quantity) * 100) : 100;
+    return `
+    <div class="product-card" onclick="openDrawer('${p.name}',${p.price},${p.remaining},${p.quantity},${p.sold})">
+        <div class="card-img-wrap">
+            <div class="placeholder-img">${condEmoji[p.condition] || '📦'}</div>
+            ${p.soldOut ? '<div class="sold-out-badge">已售罄</div>' : ''}
+            <div class="card-img-overlay">
+                <button>🛒 加购</button>
+                <button>❤ 收藏</button>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="card-top-row">
+                <span class="card-condition-tag">${p.condition}</span>
+            </div>
+            <div class="card-name">${p.name}</div>
+            <div class="card-price"><span class="unit">&yen;</span>${p.price.toLocaleString()}</div>
+            <div class="card-stock-bar">
+                <div class="card-stock-fill" style="width:${soldPct}%"></div>
+            </div>
+            <div class="card-stock-info">
+                <span>余量 ${p.remaining}/${p.quantity}</span>
+                <span>已售 ${p.sold}</span>
+            </div>
+            <div class="card-footer-row">
+                <div class="card-stats">
+                    <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>${p.views}</span>
+                </div>
+            </div>
+        </div>
+    </div>`;
+}
+
+function renderMyProductCard(p) {
+    if (p.soldOut) {
+        return `
+        <div class="product-card" style="opacity:0.7">
+            <div class="card-img-wrap">
+                <div class="placeholder-img">📚</div>
+                <div class="sold-out-badge" style="background:rgba(224,122,95,.85)">已售罄</div>
+            </div>
+            <div class="card-body">
+                <div class="card-top-row"><span class="card-condition-tag">已售罄</span></div>
+                <div class="card-name">${p.name}</div>
+                <div class="card-price"><span class="unit">&yen;</span>${p.price.toLocaleString()}</div>
+                <div class="card-stock-bar">
+                    <div class="card-stock-fill" style="width:100%;background:#E07A5F"></div>
+                </div>
+                <div class="card-stock-info">
+                    <span>库存 0</span><span>已售 ${p.sold}</span>
+                </div>
+                <div class="card-footer-row">
+                    <div class="card-stats"><span>已售罄</span></div>
+                    <div style="display:flex;gap:6px">
+                        <button style="padding:4px 10px;border-radius:6px;font-size:12px;border:1px solid #ddd;background:#fff;cursor:pointer">编辑</button>
+                        <button style="padding:4px 10px;border-radius:6px;font-size:12px;border:1px solid #ddd;background:#fff;cursor:pointer">上架</button>
+                    </div>
+                </div>
+            </div>
+        </div>`;
+    }
+    return `
+    <div class="product-card">
+        <div class="card-img-wrap">
+            <div class="placeholder-img">${p.down ? '📦' : '📱'}</div>
+            ${p.down ? '<div class="sold-out-badge" style="background:rgba(0,0,0,.5)">已下架</div>' : ''}
+        </div>
+        <div class="card-body">
+            <div class="card-top-row"><span class="card-condition-tag">${p.down ? '已下架' : '在售'}</span></div>
+            <div class="card-name">${p.name}</div>
+            <div class="card-price"><span class="unit">&yen;</span>${p.price.toLocaleString()}</div>
+            <div class="card-stock-bar">
+                <div class="card-stock-fill" style="width:${Math.round((p.sold/(p.stock+p.sold||1))*100)}%"></div>
+            </div>
+            <div class="card-stock-info">
+                <span>库存 ${p.stock}</span><span>已售 ${p.sold}</span>
+            </div>
+            <div class="card-footer-row">
+                <div></div>
+                <div style="display:flex;gap:6px">
+                    <button style="padding:4px 10px;border-radius:6px;font-size:12px;border:1px solid #ddd;background:#fff;cursor:pointer">编辑</button>
+                    <button style="padding:4px 10px;border-radius:6px;font-size:12px;border:1px solid #ddd;background:#fff;cursor:pointer">${p.down ? '上架' : '下架'}</button>
+                </div>
+            </div>
+        </div>
+    </div>`;
+}
+
+// Render
+document.getElementById('productGrid').innerHTML = products.map(renderProductCard).join('');
+document.getElementById('myProductsGrid').innerHTML = myProducts.map(renderMyProductCard).join('');
+
+// Tab switch
+function switchTab(btn) {
+    btn.parentElement.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+}
+
+// Drawer
+function openDrawer(name, price, remaining, quantity, sold) {
+    document.getElementById('drawerName').textContent = name;
+    document.getElementById('drawerStockFill').style.width = Math.round((sold/quantity)*100) + '%';
+    const overlay = document.getElementById('drawerOverlay');
+    overlay.classList.add('open');
+    document.querySelector('.drawer-stock-text').textContent = `库存 ${remaining} / ${quantity} · 已售 ${sold}`;
+    document.querySelector('.drawer-price').innerHTML = `<span class="unit">&yen;</span>${price.toLocaleString()}`;
+}
+function closeDrawer() {
+    document.getElementById('drawerOverlay').classList.remove('open');
+}
+document.getElementById('drawerOverlay').addEventListener('click', function(e) {
+    if (e.target === this) closeDrawer();
+});
+</script>
+
+</body>
+</html>

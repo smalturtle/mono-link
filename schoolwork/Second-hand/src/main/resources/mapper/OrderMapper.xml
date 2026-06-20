@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.secondhand.mapper.OrderMapper">
+
+    <!-- 买家订单列表 -->
+    <select id="selectBuyerOrders" resultType="java.util.Map">
+        SELECT
+            o.id, o.order_no, o.buyer_id, o.seller_id,
+            o.total_amount, o.status, o.address, o.remark,
+            o.create_time, o.update_time,
+            su.username AS seller_name
+        FROM orders o
+        LEFT JOIN user su ON o.seller_id = su.id
+        WHERE o.buyer_id = #{buyerId}
+        <if test="status != null">
+            AND o.status = #{status}
+        </if>
+        ORDER BY o.create_time DESC
+    </select>
+
+    <!-- 卖家订单列表 -->
+    <select id="selectSellerOrders" resultType="java.util.Map">
+        SELECT
+            o.id, o.order_no, o.buyer_id, o.seller_id,
+            o.total_amount, o.status, o.address, o.remark,
+            o.create_time, o.update_time,
+            bu.username AS buyer_name
+        FROM orders o
+        LEFT JOIN user bu ON o.buyer_id = bu.id
+        WHERE o.seller_id = #{sellerId}
+        <if test="status != null">
+            AND o.status = #{status}
+        </if>
+        ORDER BY o.create_time DESC
+    </select>
+
+    <!-- 管理员/卖家全部订单 -->
+    <select id="selectAllOrders" resultType="java.util.Map">
+        SELECT
+            o.id, o.order_no, o.buyer_id, o.seller_id,
+            o.total_amount, o.status, o.address, o.remark,
+            o.create_time, o.update_time,
+            bu.username AS buyer_name,
+            su.username AS seller_name,
+            (SELECT COUNT(*) FROM order_item oi WHERE oi.order_id = o.id) AS item_count
+        FROM orders o
+        LEFT JOIN user bu ON o.buyer_id = bu.id
+        LEFT JOIN user su ON o.seller_id = su.id
+        <where>
+            <if test="status != null">
+                o.status = #{status}
+            </if>
+        </where>
+        ORDER BY o.create_time DESC
+    </select>
+
+    <!-- 订单明细 -->
+    <select id="selectOrderItems" resultType="java.util.Map">
+        SELECT id, order_id, product_id, product_name, product_image, price, quantity
+        FROM order_item
+        WHERE order_id = #{orderId}
+    </select>
+
+</mapper>

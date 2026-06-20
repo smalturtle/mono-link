@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.secondhand.mapper.CartMapper">
+
+    <!-- 联表查询购物车列表，包含商品详情 -->
+    <select id="selectCartListByUserId" resultType="java.util.Map">
+        SELECT
+            c.id AS cart_id,
+            c.quantity,
+            c.create_time,
+            p.id AS product_id,
+            p.name AS product_name,
+            p.price,
+            COALESCE(p.image_url, JSON_UNQUOTE(JSON_EXTRACT(p.images, '$[0]'))) AS image_url,
+            p.images,
+            p.user_id AS seller_id,
+            p.status AS product_status,
+            (p.price * c.quantity) AS subtotal
+        FROM cart c
+        INNER JOIN product p ON c.product_id = p.id
+        WHERE c.user_id = #{userId}
+        ORDER BY c.create_time DESC
+    </select>
+
+    <!-- 检查商品是否已在用户购物车中 -->
+    <select id="selectByUserIdAndProductId" resultType="com.secondhand.entity.Cart">
+        SELECT * FROM cart
+        WHERE user_id = #{userId} AND product_id = #{productId}
+        LIMIT 1
+    </select>
+
+</mapper>

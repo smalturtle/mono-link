@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.secondhand.mapper.FavoriteMapper">
+
+    <!-- 查询用户收藏列表（联表查询商品信息） -->
+    <select id="selectFavoriteListByUserId" resultType="java.util.Map">
+        SELECT
+            f.id AS favorite_id,
+            f.create_time AS favorite_time,
+            p.id AS product_id,
+            p.name AS product_name,
+            p.price,
+            p.`condition`,
+            p.status AS product_status,
+            COALESCE(p.image_url, JSON_UNQUOTE(JSON_EXTRACT(p.images, '$[0]'))) AS image_url,
+            p.images,
+            p.create_time AS product_create_time
+        FROM favorite f
+        INNER JOIN product p ON f.product_id = p.id
+        WHERE f.user_id = #{userId}
+        ORDER BY f.create_time DESC
+    </select>
+
+    <!-- 检查是否已收藏 -->
+    <select id="selectByUserIdAndProductId" resultType="com.secondhand.entity.Favorite">
+        SELECT * FROM favorite
+        WHERE user_id = #{userId} AND product_id = #{productId}
+        LIMIT 1
+    </select>
+
+</mapper>
