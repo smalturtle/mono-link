@@ -1,4 +1,20 @@
 {
   "api_key": "7d80c693b82f46c485b80ffe03e7559f.LL2rj9TzqPSOw41z",
-  "model": "glm-4.5-air"
+  "model": "glm-5.2",
+  "models": [
+    "glm-5.2",
+    "glm-5.1",
+    "glm-5",
+    "glm-5-Turbo",
+    "glm-4.7",
+    "glm-4.7-FlashX",
+    "glm-4.6",
+    "glm-4.5-Air",
+    "glm-4.5-AirX",
+    "glm-4-Long",
+    "glm-4-FlashX-250414",
+    "glm-4.7-Flash",
+    "glm-4.5-Flash",
+    "glm-4-Flash-250414"
+  ]
 }
