@@ -9,7 +9,7 @@ from zai import ZhipuAiClient
 import zai
 
 
-def chat_with_retry(client, model, messages, max_tokens, max_retries=3, timeout=6000):
+def chat_with_retry(client, model, messages, max_tokens, max_retries=2, timeout=600):
     """简单的带重试和超时的对话请求"""
     for retry in range(max_retries):
         try:
@@ -110,6 +110,9 @@ try:
                 )
                 print(response1.choices[0].message.content)
                 total_tokens += response1.usage.total_tokens
+                log_entry = f"{datetime.now().strftime('%Y-%m-%d %H:%M:%S')} - 第{i+1}轮对话-第1步（深度分析）: 模型={current_model}, 消耗token={response1.usage.total_tokens}\n"
+                with open(log_path, "a", encoding="utf-8") as f:
+                    f.write(log_entry)
                 conversation.append({"role": "user", "content": f"请仔细阅读以下文章，进行超详细深度分析：\n\n{article}\n\n请完成以下任务（必须极其详细）：\n1. 提取所有核心概念和术语（不少于100个，每个概念都要有详细定义和解释）\n2. 分析文章的整体结构和逻辑框架（画出逻辑流程图并用文字详细描述）\n3. 识别文章中的所有论点和论据（每个论点都要有详细分析）\n4. 指出文章的创新点和贡献（与相关领域其他研究对比分析）\n5. 分析文章的局限性和可以改进的地方（提出具体的改进方案）\n6. 总结文章对该领域的影响和意义\n\n请用极其详细的 Markdown 格式回答，每个部分不少于2000字，不要省略任何细节。"})
                 conversation.append({"role": "assistant", "content": response1.choices[0].message.content})
                 
@@ -136,6 +139,9 @@ try:
                 )
                 print(response2.choices[0].message.content)
                 total_tokens += response2.usage.total_tokens
+                log_entry = f"{datetime.now().strftime('%Y-%m-%d %H:%M:%S')} - 第{i+1}轮对话-第2步（思维导图）: 模型={current_model}, 消耗token={response2.usage.total_tokens}\n"
+                with open(log_path, "a", encoding="utf-8") as f:
+                    f.write(log_entry)
                 conversation.append({"role": "user", "content": "基于以上分析，请为这篇文章创建一个极其详尽的思维导图结构。要求：\n1. 至少包含10个主要分支\n2. 每个主要分支至少包含15个子分支\n3. 每个子分支至少包含10个孙分支\n4. 每个节点都要有极其详细的描述和解释\n5. 使用 Markdown 列表格式表示层级关系\n6. 每个分支都要有实际内容，不能是空的\n\n请尽可能详尽，把每个概念都展开到极致，不要省略任何细节。"})
                 conversation.append({"role": "assistant", "content": response2.choices[0].message.content})
                 
@@ -166,6 +172,9 @@ try:
                 )
                 print(response3.choices[0].message.content)
                 total_tokens += response3.usage.total_tokens
+                log_entry = f"{datetime.now().strftime('%Y-%m-%d %H:%M:%S')} - 第{i+1}轮对话-第3步（多语言翻译）: 模型={current_model}, 消耗token={response3.usage.total_tokens}\n"
+                with open(log_path, "a", encoding="utf-8") as f:
+                    f.write(log_entry)
                 conversation.append({"role": "user", "content": "请将原始文章的完整内容（包括所有细节）翻译成以下语言，每个语言版本都要极其完整、准确、详细：\n1. 英语（English）\n2. 日语（日本語）\n3. 韩语（한국어）\n4. 法语（Français）\n5. 德语（Deutsch）\n6. 西班牙语（Español）\n7. 俄语（Русский）\n8. 阿拉伯语（العربية）\n9. 葡萄牙语（Português）\n10. 意大利语（Italiano）\n\n每个语言版本不少于3000字，保持原文的所有信息、细节和语气，逐字逐句准确翻译，不要省略任何内容。"})
                 conversation.append({"role": "assistant", "content": response3.choices[0].message.content})
                 
@@ -193,6 +202,9 @@ try:
                 )
                 print(response4.choices[0].message.content)
                 total_tokens += response4.usage.total_tokens
+                log_entry = f"{datetime.now().strftime('%Y-%m-%d %H:%M:%S')} - 第{i+1}轮对话-第4步（教学材料）: 模型={current_model}, 消耗token={response4.usage.total_tokens}\n"
+                with open(log_path, "a", encoding="utf-8") as f:
+                    f.write(log_entry)
                 
                 success = True
                 final_response = response4
