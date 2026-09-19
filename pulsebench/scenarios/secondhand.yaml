@@ -1,0 +1,49 @@
+# 压测 schoolwork/Second-hand(闲小铺)Spring Boot + MySQL 应用
+# 前提:应用运行在 :8080,数据库已灌入测试商品
+name: secondhand-mixed
+base_url: http://localhost:8080
+
+load:
+  duration: 60s
+  ramp_up: 10s
+  users: 30
+
+timeout:
+  request: 5s
+
+steps:
+  - name: product_list          # 分页查询(MyBatis-Plus 分页)
+    request:
+      method: GET
+      url: /api/product/list?page=1&size=12
+    assert:
+      status: 200
+      max_latency: 300ms
+
+  - name: product_search        # 带名称过滤 + 价格排序的查询
+    request:
+      method: GET
+      url: /api/product/list?name=%E6%B5%8B%E8%AF%95&sortBy=price_asc&page=2&size=12
+    assert:
+      status: 200
+      max_latency: 300ms
+
+  - name: category_tree         # 分类树(递归组装)
+    request:
+      method: GET
+      url: /api/category/list
+    assert:
+      status: 200
+      max_latency: 200ms
+
+  - name: product_detail        # 详情:含卖家信息 + 浏览计数写库(热点行更新)
+    request:
+      method: GET
+      url: /api/product/57
+    assert:
+      status: 200
+      max_latency: 500ms
+
+thresholds:
+  p95_latency: 800ms
+  error_rate: 0.01
