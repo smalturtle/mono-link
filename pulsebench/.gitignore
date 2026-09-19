@@ -1,0 +1,4 @@
+bin/
+reports/
+logs/
+coverage.out

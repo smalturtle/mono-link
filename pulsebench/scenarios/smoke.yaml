@@ -1,0 +1,46 @@
+# Smoke test against the bundled test server:
+#   go run ./cmd/testserver &          # terminal 1
+#   pulsebench run scenarios/smoke.yaml
+name: api-smoke
+base_url: http://localhost:8080
+
+load:
+  duration: 60s
+  ramp_up: 10s        # thresholds only judge the steady window after this
+  users: 50
+
+timeout:
+  request: 5s
+
+think_time: 200ms
+
+plugins:
+  console: {}
+  json_report:
+    out_dir: reports
+  logger:
+    log_dir: logs
+
+steps:
+  - name: list_items
+    request:
+      method: GET
+      url: /api/items
+      timeout: 2s
+    assert:
+      status: 200
+      max_latency: 500ms   # failure counts as assert_failures, not errors
+
+  - name: create_item
+    request:
+      method: POST
+      url: /api/items
+      headers:
+        Content-Type: application/json
+      body: '{"name":"demo"}'
+    assert:
+      status: 201
+
+thresholds:              # steady-state only; failure → exit code 2
+  p95_latency: 800ms
+  error_rate: 0.01

@@ -1,0 +1,20 @@
+# Minimal 10-second sanity run against the bundled test server.
+name: quick
+base_url: http://localhost:8080
+
+load:
+  duration: 10s
+  ramp_up: 2s
+  users: 10
+
+steps:
+  - name: ping
+    request:
+      method: GET
+      url: /ping
+    assert:
+      status: 200
+
+thresholds:
+  p95_latency: 200ms
+  error_rate: 0.01
