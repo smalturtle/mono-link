@@ -1,24 +1,38 @@
-# ai-interviewer
+# 先体验，再看代码
 
-单题打分。`prompts/contract-v1.md`、`data/samples/good.txt`、`data/samples/fluff.txt` 和 `data/samples/human-scores.json` 是按已确认 seed 生成的草案。`human-scores.json` 里的分数不是你的人工分，正式对比前请替换。
+这是一个单题面试评分。你写一段「介绍一个项目」，页面给出四个分数、扣在哪句话，以及针对最弱一项的一句追问。页面不算分，只负责把回答交给本机接口。
+
+## 打开页面
+
+密钥已经在 `.env` 里，不用再配。在这个目录执行：
 
 ```bash
 cd ai-interviewer
-python -m venv .venv
 source .venv/bin/activate
-pip install -r requirements.txt
-cp .env.example .env   # 填 OPENAI_API_KEY 或 DASHSCOPE_API_KEY，以及 MODEL_NAME
 uvicorn app.main:app --reload --port 8000
 ```
 
-```bash
-curl -s -X POST localhost:8000/api/v1/grade \
-  -H 'content-type: application/json' \
-  -d "$(python -c 'import json,pathlib; print(json.dumps({"question":"介绍一个项目","answer":pathlib.Path("data/samples/fluff.txt").read_text()}))')"
-```
+浏览器打开 http://127.0.0.1:8000
 
-好答把 `fluff.txt` 换成 `good.txt`。结果可存到 `artifacts/grade-fluff.json` 与 `artifacts/grade-good.json`。
+页面上只有一道题。写完点「看评分」。你会看到：
 
-校验测试：`pytest`。
+- 结构、具体程度、是否靠谱、是否答这道题，各 0 到 5 分
+- 没满分的项会引用你的原话说明原因
+- 最下面一句追问，打在最低的那一项上
 
-回归：`python eval/eval_run.py`（会请求本机 8000 端口）。输出 `artifacts/eval.csv`，并在末尾打印虚答且原分 depth≥3 的条数，以及校验后 depth。
+试两段现成的回答也可以，内容在 `data/samples/good.txt` 和 `data/samples/fluff.txt`。把文字贴进页面即可。虚答听起来完整，但没有具体细节，具体程度应该低。
+
+这一页不会进入第二轮对话。追问只是显示出来。
+
+每次评分会在启动服务的终端里打出过程，并追加到 `logs/grade.log`。同一次请求前面有同一个六位编号。Cursor 底部的 Output 面板看不到这些行。
+
+## 想接着看代码时
+
+| 你想知道 | 看这个文件 |
+|---|---|
+| 四个分数和追问长什么样 | `app/schemas.py` |
+| 页面把回答交到哪里 | `app/main.py` 的 `POST /api/v1/grade` |
+| 模型按什么规则打分 | `prompts/contract-v1.md` |
+| 引用必须来自原文、虚答封顶 | `app/validate.py` |
+
+`.env` 里的 `MODEL_NAME` 是当前模型。换模型就改这一行，然后重启上面的命令。
