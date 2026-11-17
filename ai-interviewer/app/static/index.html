@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>介绍一个项目</title>
+  <style>
+    body { font-family: -apple-system, "PingFang SC", sans-serif; margin: 0; background: #f6f5f2; color: #1c1b19; }
+    main { max-width: 720px; margin: 0 auto; padding: 32px 20px 64px; }
+    h1 { font-size: 28px; margin: 0 0 8px; }
+    p.lead { margin: 0 0 24px; color: #5c574e; }
+    textarea { width: 100%; min-height: 180px; box-sizing: border-box; font: 16px/1.5 inherit; padding: 12px; border: 1px solid #d5d0c8; border-radius: 8px; }
+    button { margin-top: 12px; font: 16px inherit; padding: 10px 18px; border: 0; border-radius: 8px; background: #1c1b19; color: #fff; }
+    button:disabled { opacity: 0.5; }
+    .error { color: #8d2a2a; }
+    .scores { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 24px 0; }
+    .score { background: #fff; border-radius: 8px; padding: 12px; }
+    .score b { display: block; font-size: 28px; }
+    .score span { color: #5c574e; font-size: 14px; }
+    article { background: #fff; border-radius: 8px; padding: 16px; margin-bottom: 12px; }
+    mark { background: #ffe08a; }
+    .follow { border-left: 4px solid #1c1b19; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>介绍一个项目</h1>
+    <p class="lead">像面试一样写一段回答。提交后会看到四个分数、扣分原因，以及针对最弱一项的一句追问。这一页不会再追问第二轮。</p>
+    <textarea id="answer" placeholder="写你做过的一个项目。最好有你自己做的动作、一个数字，以及你放弃了什么。"></textarea>
+    <button id="go" type="button">看评分</button>
+    <p id="status" class="error"></p>
+    <section id="out" hidden></section>
+  </main>
+  <script>
+    const labels = { structure: "结构", depth: "具体程度", accuracy: "是否靠谱", relevance: "是否答这道题" };
+    const answerEl = document.querySelector("#answer");
+    const button = document.querySelector("#go");
+    const status = document.querySelector("#status");
+    const out = document.querySelector("#out");
+
+    button.addEventListener("click", async () => {
+      status.textContent = "";
+      out.hidden = true;
+      button.disabled = true;
+      button.textContent = "正在评分…";
+      try {
+        const response = await fetch("/api/v1/grade", {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({ questionCode: "introduce-project", answer: answerEl.value })
+        });
+        const body = await response.json();
+        if (!response.ok) throw new Error(body.detail || "评分失败");
+        render(body);
+      } catch (error) {
+        status.textContent = error.message;
+      } finally {
+        button.disabled = false;
+        button.textContent = "看评分";
+      }
+    });
+
+    function render(body) {
+      const cards = Object.keys(labels).map((key) =>
+        `<div class="score"><b>${body.scores[key]}</b><span>${labels[key]}</span></div>`
+      ).join("");
+      const reasons = (body.reasons || []).map((reason) =>
+        `<article><strong>${labels[reason.dimension]}</strong><p>${escapeHtml(reason.text)}</p><p>原话：<mark>${escapeHtml(reason.quote)}</mark></p></article>`
+      ).join("");
+      out.innerHTML = `<div class="scores">${cards}</div>${reasons}<article class="follow"><strong>追问（${labels[body.followup_dimension]}）</strong><p>${escapeHtml(body.followup)}</p></article>`;
+      out.hidden = false;
+    }
+
+    function escapeHtml(text) {
+      return String(text).replace(/[&<>"']/g, (ch) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[ch]));
+    }
+  </script>
+</body>
+</html>
