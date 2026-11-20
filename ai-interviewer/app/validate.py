@@ -17,6 +17,28 @@ def one_sentence(text: str) -> str:
     return stripped[: match.end()]
 
 
+def validation_note(before, after, answer: str) -> str:
+    """Describe what validate changed. Does not alter scores."""
+    bad_quote = [reason for reason in before.reasons if not reason.quote or reason.quote not in answer]
+    full_score = [
+        reason
+        for reason in before.reasons
+        if reason.quote and reason.quote in answer and getattr(before.scores, reason.dimension) >= 5
+    ]
+    notes = []
+    if bad_quote:
+        notes.append(f"引用不是原话被丢掉 {len(bad_quote)} 条")
+    if full_score:
+        notes.append(f"满分项的理由被去掉 {len(full_score)} 条")
+    if before.scores.depth != after.scores.depth:
+        notes.append(f"depth 因为「没有具体细节」从 {before.scores.depth} 压到 {after.scores.depth}")
+    if before.followup_dimension != after.followup_dimension:
+        notes.append(f"追问项从 {before.followup_dimension} 改到 {after.followup_dimension}")
+    if not notes:
+        return "未改分"
+    return "；".join(notes)
+
+
 def validate(result, answer: str):
     """Return a copy. scores_raw is left unchanged. scores may be capped."""
     graded = result.model_copy(deep=True)
