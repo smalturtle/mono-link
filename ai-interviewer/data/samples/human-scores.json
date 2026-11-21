@@ -1,0 +1,15 @@
+{
+  "note": "草案分数，按 contract-v1 的锚点填写，用来解除 M1 阻塞。正式当证据前请换成你自己的人工分。",
+  "good": {
+    "structure": 4,
+    "depth": 4,
+    "accuracy": 4,
+    "relevance": 5
+  },
+  "fluff": {
+    "structure": 2,
+    "depth": 1,
+    "accuracy": 3,
+    "relevance": 2
+  }
+}
